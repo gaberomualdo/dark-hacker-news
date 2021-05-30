@@ -1,8 +1,8 @@
 # DarkHN
 
-Dark mode Hacker News.
+Dark mode for Hacker News.
 
-**Replace news.ycombinator.com in the HN URL with [darkhn.herokuapp.com](https://darkhn.herokuapp.com/).**
+To use: **replace news.ycombinator.com in the URL with [darkhn.herokuapp.com](https://darkhn.herokuapp.com/).**
 
 ## Technologies
 
