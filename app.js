@@ -17,6 +17,7 @@ const makeURL = (protocol, hostname, fullPath) => {
 const mirrorSite = (req, res) => {
   const reqPath = req.originalUrl;
   const mirrorURL = makeURL(mirrorProtocol, mirrorHostname, reqPath);
+  console.log("Request sent for " + mirrorURL);
 
   axios({
     method: 'get',
