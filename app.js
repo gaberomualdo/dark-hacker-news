@@ -1,8 +1,11 @@
 const cheerio = require('cheerio');
 const express = require('express');
 const axios = require('axios');
+const { setupCache } = require('axios-cache-adapter');
 const path = require('path');
 const { URL } = require('url');
+
+const githubURL = "https://github.com/xtrp/darkhn";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -14,12 +17,19 @@ const makeURL = (protocol, hostname, fullPath) => {
   return protocol + '://' + path.join(hostname, fullPath);
 };
 
+const cache = setupCache({
+  maxAge: 5 * 1000
+});
+const cachedAxios = axios.create({
+  adapter: cache.adapter
+});
+
 const mirrorSite = (req, res) => {
   const reqPath = req.originalUrl;
   const mirrorURL = makeURL(mirrorProtocol, mirrorHostname, reqPath);
   console.log("Request sent for " + mirrorURL);
 
-  axios({
+  cachedAxios({
     method: 'get',
     url: mirrorURL,
     headers: {
@@ -53,8 +63,8 @@ const mirrorSite = (req, res) => {
           $(elm).attr('href', newElmHrefURL);
         });
 
-        // add " | Dark" to title
-        $('title').text($('title').text() + ' – Dark');
+        // add Dark to title
+        $('title').text($('title').text() + ' Dark');
 
         // remove logged-in functionality (ex: voting, submit, comment, etc.)
 
@@ -77,9 +87,10 @@ const mirrorSite = (req, res) => {
         $('.yclinks').append(" | <a></a>")
 
         // add link to default site in place of login button
-        const loginButton = $('.pagetop a[href^="login"], .pagetop a[href^="/login"]');
-        loginButton.attr('href', mirrorURL);
-        loginButton.text('default site');
+        const loginButton = $('td:last-child > .pagetop').html(`
+        <a href="${mirrorURL}">light</a>
+         | 
+        <a href="${githubURL}">darkhn</a>`);
 
         // add reply on default site button in place of reply button
         $('.reply a').each((ind, replyButton) => {
@@ -139,14 +150,21 @@ const mirrorSite = (req, res) => {
       }
     })
     .catch((err) => {
-      const statusCode = err.response.status;
+      if(err.response) {
+        const statusCode = err.response.status;
 
-      res.header('Content-Type', 'text/plain; charset=utf-8');
-      if (statusCode === 404) {
-        // HN typically shows the text 'Unknown.' on pages with 404 errors
-        res.send('Unknown.');
+        res.header('Content-Type', 'text/plain; charset=utf-8');
+        res.status(statusCode);
+        if (statusCode === 404) {
+          // HN typically shows the text 'Unknown.' on pages with 404 errors
+          res.send('Unknown.');
+        } else {
+          res.send('Error ' + statusCode);
+        }
       } else {
-        res.send('Error ' + statusCode);
+        console.log(err);
+        res.status(500);
+        res.send('DarkHN server error.');
       }
     });
 };
