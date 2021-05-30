@@ -1,0 +1,26 @@
+{
+  "name": "darkhn",
+  "version": "0.1.0",
+  "description": "Hacker News dark theme. Just replace news.ycombinator.com in the URL with darkhn.now.sh.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xtrp/darkhn.git"
+  },
+  "author": "Fred Adams <xtrp@xtrp.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xtrp/darkhn/issues"
+  },
+  "homepage": "https://github.com/xtrp/darkhn#readme",
+  "devDependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
