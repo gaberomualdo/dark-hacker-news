@@ -19,7 +19,7 @@ b {
   color: #fafafa;
 }
 
-td>.title {
+td.title {
   color: #fafafa;
 }
 
@@ -53,7 +53,7 @@ td>a:link {
   color: #8c96ac;
 }
 
-.title>a:link {
+.titleline>a:link {
   color: #8c96ac;
 }
 
@@ -65,7 +65,7 @@ a>u {
   color: #8c96ac;
 }
 
-.title>a:visited {
+.titleline>a:visited {
   color: #979cf4;
 }
 
